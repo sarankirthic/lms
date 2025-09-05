@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your custom CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: #000080;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            margin-left: 15px;
+        }
+
+        .hero-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-banner p {
+            font-size: 1.2rem;
+        }
+
+        .table {
+            margin-top: 15px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Button hover effects */
+        .btn-success {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+        .form-section {
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #007bff; /* Bootstrap primary color */
+            margin-bottom: 15px;
+        }
+        @media (max-width: 576px) {
+            .form-section {
+                padding: 15px; /* Reduce padding for small screens */
+            }
+            h2 {
+                font-size: 1.5rem; /* Smaller heading size */
+            }
+        }
+        /* Responsive table styling */
+        .table-responsive {
+            overflow-x: auto; /* Allow horizontal scrolling on small screens */
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Instructor Dashboard</a>
+    <div class="ml-auto">
+        <a th:href="@{/logout}" class="btn btn-danger">Logout</a>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="text-center">Instructor Dashboard</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h4 th:text="'Welcome, ' + ${user.username}">Welcome</h4>
+<!--            <small th:text="'Role: ' + ${user.role}"></small>-->
+        </div>
+    </div>
+
+    <!-- Lecture Form -->
+    <div class="form-section">
+        <h2>Lecture Form</h2>
+        <form th:action="@{/instructor/saveLecture}" th:object="${lecture}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="llname">Lecture Name</label>
+                    <input type="text" id="llname" th:field="*{name}" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="link">Lecture Link</label>
+                    <input type="url" id="link" th:field="*{link}" class="form-control" required placeholder="Enter lecture URL">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lfile">Upload Lecture info</label>
+                <input type="file" id="lfile" name="file" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Save Lecture</button>
+        </form>
+    </div>
+
+    <!-- Study Material Form -->
+    <div class="form-section">
+        <h2>Study Material Form</h2>
+        <form th:action="@{/instructor/saveMaterial}" th:object="${material}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="sname">Material Name</label>
+                    <input type="text" id="sname" th:field="*{name}" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="sdescription">Material Description</label>
+                    <input type="text" id="sdescription" th:field="*{description}" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="sfile">Upload Material</label>
+                <input type="file" id="sfile" name="file" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Save Material</button>
+        </form>
+    </div>
+
+    <!-- Notification Form -->
+    <div class="form-section">
+        <h2>Notification Form</h2>
+        <form th:action="@{/instructor/saveNotification}" th:object="${notification}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="nname">Notification Name</label>
+                    <input type="text" id="nname" th:field="*{name}" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ndescription">Notification Description</label>
+                    <input type="text" id="ndescription" th:field="*{description}" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nfile">Upload Notification</label>
+                <input type="file" id="nfile" name="file" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Save Notification</button>
+        </form>
+    </div>
+
+    <!-- Assignment Form -->
+    <div class="form-section">
+
+        <h2>Assignments Form</h2>
+
+        <form th:action="@{/instructor/saveAssignment}" th:object="${assignment}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="aname">Assignment Name</label>
+                    <input type="text" id="aname" th:field="*{name}" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="adescription">Assignment Description</label>
+                    <input type="text" id="adescription" th:field="*{description}" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="deadline">Assignment Deadline</label>
+                <input type="datetime-local" id="deadline" th:field="*{deadline}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="afile">Upload Assignment</label>
+                <input type="file" id="afile" name="file" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Save Assignment</button>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Live Lectures</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Lecture Name</th>
+                    <th>Lecture Link</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="lecture, iterStat : ${lectureList}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${lecture.name}"></td>
+                    <td><a th:href="${lecture.link}" target="_blank" th:text="${lecture.link}"></a></td>
+                    <td>
+                        <a th:href="@{/instructor/viewLecture/{id}(id=${lecture.id})}" class="btn btn-info btn-sm">View</a>
+                        <a th:href="@{/instructor/editLecture/{id}(id=${lecture.id})}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/instructor/deleteLecture/{id}(id=${lecture.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a th:href="@{/instructor/downloadLecture/{id}(id=${lecture.id})}" class="btn btn-success btn-sm">Download</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>Study Materials</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Material Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="material, iterStat : ${materialList}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${material.name}"></td>
+                    <td th:text="${material.description}"></td>
+                    <td>
+                        <a th:href="@{/instructor/viewMaterial/{id}(id=${material.id})}" class="btn btn-info btn-sm">View</a>
+                        <a th:href="@{/instructor/editMaterial/{id}(id=${material.id})}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/instructor/deleteMaterial/{id}(id=${material.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a th:href="@{/instructor/downloadMaterial/{id}(id=${material.id})}" class="btn btn-success btn-sm">Download</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>Notifications</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Notification Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="notification, iterStat : ${notificationList}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${notification.name}"></td>
+                    <td th:text="${notification.description}"></td>
+                    <td>
+                        <a th:href="@{/instructor/viewNotification/{id}(id=${notification.id})}" class="btn btn-info btn-sm">View</a>
+                        <a th:href="@{/instructor/editNotification/{id}(id=${notification.id})}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/instructor/deleteNotification/{id}(id=${notification.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a th:href="@{/instructor/downloadNotification/{id}(id=${notification.id})}" class="btn btn-success btn-sm">Download</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>Assignments</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Assignment Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="assignment, iterStat : ${assignmentList}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${assignment.name}"></td>
+                    <td th:text="${assignment.description}"></td>
+                    <td>
+                        <a th:href="@{/instructor/viewAssignment/{id}(id=${assignment.id})}" class="btn btn-info btn-sm">View</a>
+                        <a th:href="@{/instructor/editAssignment/{id}(id=${assignment.id})}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/instructor/deleteAssignment/{id}(id=${assignment.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a th:href="@{/instructor/downloadAssignment/{id}(id=${assignment.id})}" class="btn btn-success btn-sm">Download</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

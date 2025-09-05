@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+   <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: #000080;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            margin-left: 15px;
+        }
+
+        .hero-banner {
+            background-size: cover;
+            background-position: center;
+            color: black;
+            padding: 50px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .hero-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-banner p {
+            font-size: 1.2rem;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .table {
+            margin-top: 15px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Button hover effects */
+        .btn-success {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-banner h1 {
+                font-size: 2rem;
+            }
+            .hero-banner p {
+                font-size: 1rem;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-nav .nav-link {
+                font-size: 0.9rem;
+            }
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                text-align: center;
+            }
+            .card {
+                margin-bottom: 10px;
+            }
+            .btn {
+                margin-top: 10px;
+            }
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .container {
+            max-width: 1010px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Student Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/student/notification}">Notification</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/student/}">Registration Form</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero Banner -->
+<div class="hero-banner">
+    <h1>Welcome to the Student Dashboard</h1>
+    <p>Manage your study materials, live lectures, assignments, and more.</p>
+</div>
+
+<!-- Main Content -->
+<div class="container mt-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12 col-md-8">
+            <h4 th:text="'Welcome, ' + ${user.username}">Welcome</h4>
+            <small th:text="'Role: ' + ${user.role}"></small>
+        </div>
+        <div class="col-12 col-md-4 text-md-right text-center">
+            <a th:href="@{/logout}" class="btn btn-danger mt-2 mt-md-0">Logout</a>
+        </div>
+    </div>
+
+    <!-- Live Lectures Section -->
+    <h2>Live Lectures</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Lecture Name</th>
+                        <th>Lecture Link</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="lecture, iterStat : ${lectureList}">
+                        <td th:text="${iterStat.index + 1}"></td>
+                        <td th:text="${lecture.name}"></td>
+                        <td>
+                            <a th:href="${lecture.link}" target="_blank" th:text="${lecture.link}"></a>
+                        </td>
+                        <td>
+                            <a th:href="@{/student/downloadLecture/{id}(id=${lecture.id})}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Material Section -->
+    <h2 class="mt-4">Study Material</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Material Name</th>
+                        <th>Material Description</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="material, iterStat : ${materiallist}">
+                        <td th:text="${iterStat.index + 1}"></td>
+                        <td th:text="${material.name}"></td>
+                        <td th:text="${material.description}"></td>
+                        <td>
+                            <a th:href="@{/student/downloadMaterial/{id}(id=${material.id})}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Section -->
+    <h2 class="mt-4">Notifications</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Notification Name</th>
+                        <th>Notification Description</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="notification, iterStat : ${notificationlist}">
+                        <td th:text="${iterStat.index + 1}"></td>
+                        <td th:text="${notification.name}"></td>
+                        <td th:text="${notification.description}"></td>
+                        <td>
+                            <a th:href="@{/student/downloadNotification/{id}(id=${notification.id})}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assignments Section -->
+    <h2 class="mt-4">Assignments</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Assignment Name</th>
+                        <th>Assignment Description</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="assignment, iterStat : ${assignmentList}">
+                        <td th:text="${iterStat.index + 1}"></td>
+                        <td th:text="${assignment.name}"></td>
+                        <td th:text="${assignment.description}"></td>
+                        <td>
+                            <a th:href="@{/student/downloadAssignment/{id}(id=${assignment.id})}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Student Dashboard. All rights reserved.</p>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

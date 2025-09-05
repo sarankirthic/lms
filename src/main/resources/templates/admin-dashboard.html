@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: black;
+        }
+
+        a {
+            color: #01070e;
+            text-decoration: none;
+             background-color: transparent;
+        }
+
+        .navbar {
+            background-color: #000080;
+        }
+
+        .navbar .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar .btn {
+            color: white;
+        }
+
+        .navbar .btn:hover {
+            color: #ff4d4d;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            padding-left: 50px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .form-section, .table-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .table th, .table td {
+            color: white;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table thead {
+            background-color: #000080;
+        }
+
+        .btn-primary, .btn-danger, .btn-warning, .btn-info {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+        }
+
+        .section-divider {
+            border-bottom: 2px solid white;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table thead {
+                font-size: 0.9rem;
+            }
+
+            .table td, .table th {
+                font-size: 0.85rem;
+            }
+        }
+
+        .card-body {
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1.25rem;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Admin Dashboard</a>
+    <div class="ml-auto">
+        <a th:href="@{/logout}" class="btn btn-danger">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 th:if="${user != null}" th:text="'Welcome, ' + ${user.username}">Welcome</h4>
+                <h4 th:if="${user == null}">Welcome, Guest</h4>
+<!--                <small th:text="'Role: ' + ${user.role}"></small>-->
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="mt-5">
+            <h2>Admin Tools</h2>
+            <p>Use the tools below to manage the system efficiently.</p>
+
+            <!-- Admin Options (Cards) -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img th:src="@{/img/managestudent.svg}" class="card-img-top" alt="Manage Users">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Users</h5>
+                            <p class="card-text">Add, update, or remove users.</p>
+                            <a th:href="@{/admin/manage-user}" class="btn btn-primary">Manage Student</a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img th:src="@{/img/managestudent.svg}" class="card-img-top" alt="View Reports">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage User Credentials</h5>
+                            <p class="card-text">Manage and view user activity logs.</p>
+                            <a th:href="@{/admin/users}" class="btn btn-primary">Manage User</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <img th:src="@{/img/managestudent.svg}" class="card-img-top" alt="System Settings">
+                        <div class="card-body">
+                            <h5 class="card-title">Notification</h5>
+                            <p class="card-text">Adjust Notification and permissions.</p>
+                            <a th:href="@{/admin/addNotification}" class="btn btn-primary">Add Notification</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container mt-4">
+        <div class="table-container">
+        <div class="section-divider"></div>
+    <!-- Live Lectures Section -->
+        <h2 class="section-title text-center mb-4">Live Lectures</h2>
+        <table class="table table-responsive-md table-striped">
+            <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Lecture Name</th>
+                <th>Lecture Link</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lecture, iterStat : ${lectureList}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${lecture.name}"></td>
+                <td><a th:href="${lecture.link}" target="_blank" th:text="${lecture.link}"></a></td>
+                <td>
+                    <a th:href="@{/admin/viewLecture/{id}(id=${lecture.id})}" class="btn btn-info btn-sm">View</a>
+                    <a th:href="@{/admin/editLecture/{id}(id=${lecture.id})}" class="btn btn-warning btn-sm">Edit</a>
+                    <a th:href="@{/admin/deleteLecture/{id}(id=${lecture.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this lecture?');">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <!-- Study Material Section -->
+        <h2 class="section-title text-center mb-4">Study Materials</h2>
+        <table class="table table-responsive-md table-striped">
+            <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Material Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="material, iterStat : ${materiallist}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${material.name}"></td>
+                <td th:text="${material.description}"></td>
+                <td>
+                    <a th:href="@{/admin/editMaterial/{id}(id=${material.id})}" class="btn btn-warning btn-sm">Edit</a>
+                    <a th:href="@{/admin/deleteMaterial/{id}(id=${material.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this material?');">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <!-- Notifications Section -->
+        <h2 class="section-title text-center mb-4">Notifications</h2>
+        <table class="table table-responsive-md table-striped">
+            <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Notification Name</th>
+                <th>Notification Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="notification, iterStat : ${notificationlist}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${notification.name}"></td>
+                <td th:text="${notification.description}"></td>
+                <td>
+                    <a th:href="@{/admin/editNotification/{id}(id=${notification.id})}" class="btn btn-warning btn-sm">Edit</a>
+                    <a th:href="@{/admin/deleteNotification/{id}(id=${notification.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this notification?');">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <!-- Assignments Section -->
+        <h2 class="section-title text-center mb-4">Assignments</h2>
+        <table class="table table-responsive-md table-striped">
+            <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Assignment Name</th>
+                <th>Description</th>
+                <th>Deadline</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="assignment, iterStat : ${assignmentlist}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${assignment.name}"></td>
+                <td th:text="${assignment.description}"></td>
+                <td th:text="${assignment.deadline}"></td>
+                <td>
+                    <a th:href="@{/admin/editAssignment/{id}(id=${assignment.id})}" class="btn btn-warning btn-sm">Edit</a>
+                    <a th:href="@{/admin/deleteAssignment/{id}(id=${assignment.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this assignment?');">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-container">
+        <h2 class="section-title text-center mb-4">Student Details</h2>
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Mother's Name</th>
+                <th>Address</th>
+                <th>College</th>
+                <th>Domain Interested</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Loop through the list of student details -->
+            <tr th:each="studentDetails : ${studentDetailsList}">
+                <td th:text="${studentDetails.id}"></td>
+                <td th:text="${studentDetails.firstname}"></td>
+                <td th:text="${studentDetails.middlename}"></td>
+                <td th:text="${studentDetails.lastname}"></td>
+                <td th:text="${studentDetails.age}"></td>
+                <td th:text="${studentDetails.gender}"></td>
+                <td th:text="${studentDetails.mothername}"></td>
+                <td th:text="${studentDetails.address}"></td>
+                <td th:text="${studentDetails.college}"></td>
+                <td th:text="${studentDetails.domain}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+
+<!-- JS Files -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: #000080;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            margin-left: 15px;
+        }
+
+        .hero-banner {
+            background-size: cover;
+            background-position: center;
+            color: black;
+            padding: 16px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .hero-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-banner p {
+            font-size: 1.2rem;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        /* Button hover effects */
+        .btn-success {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-banner h1 {
+                font-size: 2rem;
+            }
+
+            .hero-banner p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Flexibility for tables */
+        .table-responsive-md {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Mobile adjustment for dashboard content */
+        @media (max-width: 768px) {
+            .d-flex.justify-content-between {
+                flex-direction: column;
+            }
+
+            .btn {
+                margin-top: 15px;
+            }
+        }
+
+        /* Flexbox adjustments for cards on mobile */
+        @media (max-width: 576px) {
+            .card {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Student Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" th:href="@{/home}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/student/dashboard}">Student Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/student/notification}">Notification</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/student/admission_form}">Registration form</a></li>
+            <li class="nav-item"><a th:href="@{/logout}" class="nav-link">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero Banner -->
+<div class="hero-banner">
+    <h1>Welcome to the Student Dashboard</h1>
+    <p>Manage your study materials, live lectures, assignments, and more.</p>
+</div>
+
+<!-- Main Content -->
+<div class="container mt-4">
+    <!-- Notifications Section -->
+    <h2 class="mt-4">Notifications</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive-md">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Notification Name</th>
+                        <th>Notification Description</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="notification, iterStat : ${notificationlist}">
+                        <td th:text="${iterStat.index + 1}"></td>
+                        <td th:text="${notification.name}"></td>
+                        <td th:text="${notification.description}"></td>
+                        <td>
+                            <a th:href="@{/student/downloadNotification/{id}(id=${notification.id})}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Student Dashboard. All rights reserved.</p>
+</footer>
+
+<!-- Bootstrap and jQuery JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

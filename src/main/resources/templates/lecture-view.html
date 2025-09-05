@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Lecture</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Lecture Details</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${lecture.name}"></h5>
+            <p class="card-text"><strong>Link:</strong> <span th:text="${lecture.link}"></span></p>
+            <p class="card-text"><strong>File Path:</strong> <span th:text="${lecture.filePath}"></span></p>
+            <a th:href="@{/instructor/dashboard}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

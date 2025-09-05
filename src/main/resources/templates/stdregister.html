@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: #000080;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            margin-left: 15px;
+        }
+
+        .hero-banner {
+            background-size: cover;
+            background-position: center;
+            color: black;
+            padding: 50px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .hero-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-banner p {
+            font-size: 1.2rem;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .table {
+            margin-top: 15px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        /* Button hover effects */
+        .btn-success {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn {
+            background-color: #000080;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-banner h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Flexibility for tables */
+        .table-responsive-md {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Mobile adjustment for dashboard content */
+        @media (max-width: 768px) {
+            .d-flex.justify-content-between {
+                flex-direction: column;
+            }
+            .btn {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Student Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/student/dashboard}">Student Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/student/notification}">Notification</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/student/admission_form}">Registration form</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/logout}" class="nav-link">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero Banner -->
+<div class="hero-banner">
+    <h1>Welcome to the Student Dashboard</h1>
+    <p>Manage your study materials, live lectures, assignments, and more.</p>
+</div>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Student Admission Form</h2>
+
+    <!-- Display Message -->
+    <div th:if="${message}" class="alert alert-info mt-4" role="alert">
+        <span th:text="${message}"></span>
+    </div>
+
+    <!-- Form Section -->
+    <form th:action="@{/student/submitWork}" th:object="${studentDetails}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="row">
+            <!-- First Name -->
+            <div class="col-md-4 mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" id="firstName" th:field="*{firstname}" class="form-control" placeholder="Enter first name" required>
+            </div>
+
+            <!-- Middle Name -->
+            <div class="col-md-4 mb-3">
+                <label for="middleName" class="form-label">Middle Name</label>
+                <input type="text" id="middleName" th:field="*{middlename}" class="form-control" placeholder="Enter middle name" required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="col-md-4 mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" id="lastName" th:field="*{lastname}" class="form-control" placeholder="Enter last name" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Age -->
+            <div class="col-md-4 mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" id="age" th:field="*{age}" class="form-control" placeholder="Enter your age" required>
+            </div>
+
+            <!-- Gender -->
+            <div class="col-md-4 mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" th:field="*{gender}" required>
+                    <option value="" disabled selected>Select your gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <!-- Mother's Name -->
+            <div class="col-md-4 mb-3">
+                <label for="motherName" class="form-label">Mother's Name</label>
+                <input type="text" id="motherName" th:field="*{mothername}" class="form-control" placeholder="Enter mother's name" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Address -->
+            <div class="col-md-12 mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" id="address" th:field="*{address}" class="form-control" placeholder="Enter your address" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- College -->
+            <div class="col-md-6 mb-3">
+                <label for="college" class="form-label">College</label>
+                <input type="text" id="college" th:field="*{college}" class="form-control" placeholder="Enter college name" required>
+            </div>
+
+            <!-- Domain Interested -->
+            <div class="col-md-6 mb-3">
+                <label for="domain" class="form-label">Domain Interested</label>
+                <input type="text" id="domain" th:field="*{domain}" class="form-control" placeholder="Enter your domain of interest" required>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        </div>
+    </form>
+</div>
+
+
+<footer>
+    <p>&copy; 2024 Student Dashboard. All rights reserved.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

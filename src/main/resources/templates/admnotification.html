@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            width: 90%;
+            font-family: 'Roboto', sans-serif;
+            color: black;
+
+        }
+        a {
+            color: #01070e;
+            text-decoration: none;
+             background-color: transparent;
+        }
+
+        .navbar {
+            background-color: rgba(52, 58, 64, 0.9);
+        }
+
+        .navbar .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar .btn {
+            color: white;
+        }
+
+        .navbar .btn:hover {
+            color: #ff4d4d;
+        }
+        .container {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: black;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .form-section, .table-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .table th, .table td {
+            color: white;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table thead {
+            background-color: rgba(52, 58, 64, 0.9);
+        }
+
+        .btn-primary, .btn-danger, .btn-warning, .btn-info {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+        }
+
+        .section-divider {
+            border-bottom: 2px solid white;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table thead {
+                font-size: 0.9rem;
+            }
+
+            .table td, .table th {
+                font-size: 0.85rem;
+            }
+        }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Admin Dashboard</a>
+    <div class="ml-auto">
+        <a th:href="@{/logout}" class="btn btn-danger">Logout</a>
+        <a th:href="@{/admin/dashboard}" class="btn btn-danger">Dashboard</a>
+    </div>
+</nav>
+<!-- Notification Form -->
+<h2 class="section-title">Create a New Notification</h2>
+<div class="form-section">
+    <form th:action="@{/admin/saveNotification}" th:object="${notification}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="nname">Notification Name</label>
+                <input type="text" id="nname" th:field="*{name}" class="form-control" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="ndescription">Notification Description</label>
+                <input type="text" id="ndescription" th:field="*{description}" class="form-control" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="nfile">Upload Notification</label>
+            <input type="file" id="nfile" name="file" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Save Notification</button>
+    </form>
+</div>
+</body>
+</html>
